@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <h1>Titulo</h1>
+    <p>Nombre : <span id="name">--</span></p>
+    <p>Edad : <span id="age">--</span></p>
+    <div>
+      <p id="content">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni ad assumenda doloremque veniam sed ratione, itaque aspernatur eveniet ut nostrum optio nobis ab officia dolores vel odit! Numquam, eaque quos.
+      </p>
+    </div>
+    <ol id="numbers"></ol>
+    <script>
+      const name= "Pepe"
+      const age = 22
+      const nameSpan = document.querySelector("#name")
+      const ageSpan = document.querySelector("#age")
+      nameSpan.textContent = name
+      ageSpan.textContent =age
+      const contentSpan = document.querySelector("#content")
+      contentSpan.innerHTML = "Esto es una linea con <strong>importantes</strong> palabras"
+      let start = 4
+      let end = 12
+
+      const list = document.querySelector("#numbers")
+      // list.outerHTML = `<ol start="${start}"></ol>`
+      for (let index = start; index <= end; index++) {
+        list.innerHTML += "<li>"+index+"</li>"
+        
+      }
+      list.start =start
+    </script>
+</body>
+</html>

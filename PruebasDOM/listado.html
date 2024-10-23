@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .selected{
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>Listado</h1>
+  <ul>
+    <li onclick="selectedItem(this)">DEW</li>
+    <li>DSW</li>
+    <li>DOR</li>
+    <li>DPL</li>
+    <li class="selected">FCT</li>
+    <li>EMR</li>
+    <li>PRY</li>
+  </ul>
+  <button onclick="sendSelectedElements()"> enviar</button>
+  <script>
+    function selectedItem(element) {
+      element.classList.toggle("selected")
+    }
+
+    const items = document.querySelectorAll("li")
+    items.forEach(item => item.setAttribute("onclick","selectedItem(this)"));
+
+    function sendSelectedElements() {
+      console.log([...items].filter( items => items.classList.contains("selected")).map(items => items.textContent));
+      
+    }
+  </script>
+</body>
+</html>

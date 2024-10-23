@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .red {
+      color: red;
+    }
+    .bgcyan{
+      background-color: cyan;
+    }
+    .underline {
+      text-decoration: underline;
+    }
+     .padding {
+      padding: 20px;
+     }
+     .capitalize{
+      text-transform: capitalize;
+     }
+  </style>
+</head>
+<body>
+  <h1>indicar clases al parrafo</h1>
+  <P>
+    <button onclick="addClass('red')">color rojo</button>
+    <button onclick="addClass('bgcyan')">Fondo azul claro</button>
+    <button onclick="addClass('underline')">Subrayado</button>
+    <button onclick="addClass('padding')">Espaciado</button>
+    <button onclick="addClass('capitalize')">Mayusculas</button>
+  </P>
+  <p>
+    <input type="range" name="fontsize" id="" min="8" max="64" value="12">
+    <button onclick="changeFontSize()"> Cambiar tamaño fuente</button>
+    <button onclick="increaseFontSize()"> + </button>
+    <button onclick="decreasedFontSize()"> - </button>
+  </p>
+  <div id="content">
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellendus, optio natus suscipit eos quisquam repudiandae quidem nobis vitae cum voluptatem quod ad sunt error eius? Ipsam consequatur consequuntur excepturi sequi.</p>
+    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non explicabo eum amet fugiat earum, illo porro accusamus maxime deleniti culpa pariatur, ut nemo. Ducimus veritatis illum natus expedita tempora dolore.</p>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit recusandae, ad, dolor nulla sequi illum deserunt ipsa nesciunt ducimus nemo architecto dicta earum libero! Quia praesentium excepturi atque aperiam fugiat?</p>
+  </div>
+  <script>
+    const content = document.querySelector("#content")
+    let input = document.querySelector('input[name="fontsize"]')
+
+    function addClass(className) {
+      content.classList.toggle(className)
+    }
+
+    function changeFontSize() {
+      console.log(input.value);
+      
+      let size = input.value
+      content.style.fontSize = size + "px";
+    }
+
+    function increaseFontSize() {
+      input.value++
+      changeFontSize()
+    }
+
+    function decreasedFontSize() {
+      input.value--
+      changeFontSize()
+    }
+  </script>
+</body>
+</html>

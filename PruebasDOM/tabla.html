@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1> Rellenar la tabla</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+    <thead><tr><td colspan="3">Total</td><td id="total"></td></tr>
+    </thead>
+  </table>
+  <p>
+    <button onclick="addSamsung()">Comprar Samgung</button>
+  </p>
+
+  <script>
+    const data = [
+      ['pan', 2, 5],
+      ['queso', 5.99 ,10],
+      ['cerveza', 1.20,42]
+    ]
+    const tabla= document.querySelector("tbody")
+    const total = document.querySelector("#total")
+
+    addRow(...data)
+    function addRow(...params) {
+      tabla.innerHTML = "<tr>"
+    params.forEach(element => {
+      tabla.innerHTML += "<td>"+element[0]+"</td><td>"+element[1]+"</td><td>"+element[2]+"</td><td>"+((element[1]*element[2]).toFixed(2))+"</td>"
+    });
+    tabla.innerHTML += "</tr>"
+    
+    }
+
+    function renderTable() {
+      let calculate =0;
+      data.forEach(element => {
+        calculate+= element[2]*element[1]
+      });
+      total.textContent=calculate.toFixed(2)
+    }
+    function isInArray(params) {
+      data.forEach(element => {
+        console.log(element[0]);
+        console.log(params[0]);
+        console.log(element[1]);
+        console.log(params[1]);
+       
+        
+        
+        if (element[1]==params[1]) {
+          return true
+          
+          
+        }
+        
+        
+      });
+      return false
+        
+    }
+
+    function search(params) {
+      for (let index = 0; index < data.length; index++) {
+        
+        
+        if (data[index][0]==params[0]&&data[index][1]==params[1]) {
+          return index
+        } 
+        return -1
+        
+      }
+    }
+    
+    function addSamsung() {
+      if (isInArray(["Samgung", 400, 1])) {
+        data[search(["Samgung", 400, 1])][2]++
+      }
+      else{
+      data.push(["Samgung", 400, 1])
+      addRow(...data)
+      }
+      renderTable()
+    }
+    renderTable()
+  </script>
+</body>
+</html>
