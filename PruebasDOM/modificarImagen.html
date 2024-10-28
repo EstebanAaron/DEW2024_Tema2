@@ -7,15 +7,18 @@
 </head>
 <body>
   <h1>Dado</h1>
+  <img src="dice/dice1.png" alt="">
 
   <p>
     <button onclick="throwDice()">Lanzar el dado</button>
   </p>
   <script>
+    const image = document.querySelector('img');
     function throwDice() {
       let random = Math.floor(Math.random()*6)+1;
       console.log(random);
-    
+      image.src= `dice/dice${random}.png`;
+      image.alt = `salio ${random}`
     }
   </script>
 </body>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+
+    td {
+      border: 1px solid black;
+      padding: 4px;
+    }
+  </style>
+</head>
+<body>
+  <table></table>
+  <p>El numero de Xs es <span id="xs">--</span> y el número de Os es <span id="os">--</span></p>
+  <button onclick="updateCount()">Actualizar</button>
+  <script>
+    const nRows = 5;
+    const nColums = 5;
+    const table = document.querySelector('table');
+    const spanX = document.querySelector('#xs');
+    const spanO = document.querySelector('#os');
+
+    for(let i = 0; i < nRows; i++) {
+      let tr = document.createElement('tr');
+      for(let j = 0; j < nColums; j++) {
+        let td = document.createElement('td');
+        td.textContent = Math.random() < 0.5 ? "X" : "O";
+        td.setAttribute('onclick', 'change(this)')
+        tr.append(td);
+      }
+      table.append(tr);
+      checkRow(tr);
+    }
+    checkAllColumns();
+
+    function change(td) {
+      console.log(td.textContent);
+      td.textContent = td.textContent == "X" ? "O" : "X";
+      checkRow(td.parentElement);
+      checkAllColumns();
+      updateCount();
+    }
+
+    function updateCount() {
+      let cells = document.querySelectorAll('td');
+      let xs = [...cells].filter(td => td.textContent == 'X').length;
+      spanX.textContent = xs;
+      //spanO.textContent = (nRows * nColums) - xs;
+      spanO.textContent = cells.length - xs;
+    }
+
+    updateCount();
+
+    function checkRow(row) {
+      let first = row.children[0].textContent;
+      if ( [...row.children].every(td => td.textContent == first) ) {
+        console.log("todos iguales");
+        row.remove();
+        checkAllColumns();
+      }
+    }
+
+    function checkColumn(idColumn, rowsDelete) {
+      let cells = document.querySelectorAll(`td:nth-child(${idColumn})`);
+      console.log(cells);
+      let first = cells[0].textContent;
+      if ([...cells].every(td => td.textContent == first) ) {
+        console.log("todos son iguales");
+        cells.forEach(td => rowsDelete.push(td));
+      }
+    }
+
+    function checkAllColumns() {
+      let nColums = table.children[0].children.length;
+      rowsDelete = [];
+      for (let i = 1; i <= nColums; i++) {
+        checkColumn(i, rowsDelete);
+      }
+      let anyToDelete = rowsDelete.length;
+      rowsDelete.forEach(td => td.remove());
+      if (anyToDelete) {
+        [...table.children].forEach(tr => checkRow(tr));
+      }
+    }
+  </script>
+</body>
+</html>
+  
+</body>
+</html>

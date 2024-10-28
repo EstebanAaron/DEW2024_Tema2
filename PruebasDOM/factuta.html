@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      text-align: center;
+      align-items: center;
+    }
+    table{
+      margin: 0px auto;
+      border-collapse: collapse;
+      border: black solid;
+    }
+    td, th{
+      border: 1px solid black;
+      padding: 4px 10px;
+    }
+    thead{
+      background-color: darkblue;
+      color: whitesmoke;
+      
+    }
+    tfoot{
+      background-color: lightblue;
+    }
+  </style>
+</head>
+<body>
+  <h1>Factura</h1>
+  <p>
+    <label for="">Concepto:</label>
+    <input type="text" id="concept">
+  </p>
+  <p>
+    <label for="">Cantidad:</label>
+    <input type="text" id="quantity">
+  </p>
+  <p>
+    <label for="">Precio</label>
+    <input type="text" id="cost">€
+  </p>
+  <button onclick="insert()">Insertar</button>
+  
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Precio Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="3">Subtotal</td>
+        <td>--€</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Tasa:</td>
+        <td>--%</td>
+        <td>Impuestos:</td>
+        <td>--€</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="3">Total:</td>
+        <td>--€</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+  <script>
+    const table = document.querySelector('table')
+    function insert(){
+      const inputNewProduct = document.querySelector("#concept")
+      const inputNewQuantity = document.querySelector("#quantity")
+      const inputNewPrice = document.querySelector("#price")
+
+
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .item{
+      
+    }
+    .item1{
+      background-color: rgba(103, 170, 72, 0.664);
+    }
+  </style>
+</head>
+<body>
+  
+  <ul>
+    <li>Manzanas</li>
+    <li>Peras</li>
+    <li>Naranjas</li>
+    <li>Sandia</li>
+    <li>Kiwi</li>
+    <li>Platano</li>
+  </ul>
+  <p>
+    <input type="text" id="newFruit" >
+    <button onclick="appendFruit()">Agregar al final</button>
+    <button onclick="prependFruit()">Agregar al inicio</button>
+    <button onclick="addFruitBeforeSelected()">insertBefore</button>
+  </p>
+  <script>
+    const lista = document.querySelector('ul');
+    console.log("Nodos: ", lista.childNodes);
+    console.log("Nodos: ", lista.children);
+    
+    const inputNewFruit = document.querySelector("#newFruit")
+
+    function appendFruit(){
+      lista.append(createFruit())
+    }
+
+    function prependFruit(){
+      const newLi = document.createElement('li');
+      newLi.textContent =inputNewFruit.value;
+      lista.prepend(newLi);
+    }
+    function selectedItem(element) {
+      element.classList.toggle("item1")
+    }
+    const items = document.querySelectorAll("li")
+    items.forEach(item => item.setAttribute("onclick","selectedItem(this)"));
+
+
+    function createFruit(){
+      const newLi = document.createElement('li');
+      newLi.textContent = inputNewFruit.value;
+      setFeatures(newLi)
+      return newLi
+    }
+    function setFeatures(li){
+      li.classList.add("item")
+      li.setAttribute('ondblclick','this.remove()')
+    }
+
+    function initList(){
+      document.querySelectorAll("li").forEach(li => {
+       setFeatures(li);
+      })
+    }
+    function addFruitBeforeSelected(){
+      const liselected = document.querySelector('.item1')
+      // if (liselected)liselected.before(createFruit())
+      // else appendFruit()
+      lista.insertBefore(createFruit(), liselected)
+    }
+    initList()
+  </script>
+</body>
+</html>
