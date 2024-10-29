@@ -1,50 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    div{
+    div {
       margin: 20px;
       margin-bottom: 20px;
     }
-    body{
+
+    body {
       text-align: center;
       align-items: center;
     }
-    table{
+
+    table {
       margin: 0px auto;
       border-collapse: collapse;
       border: black solid;
     }
-    td, th{
+
+    td,
+    th {
       border: 1px solid black;
       padding: 4px 10px;
     }
-    thead{
+
+    thead {
       background-color: darkblue;
       color: whitesmoke;
-      
+
     }
-    tfoot{
+
+    tfoot {
       background-color: lightblue;
     }
-    #taxe{
+
+    #taxe {
       color: red;
     }
-    span{
+/* Solo se usa si la alternativa de chekData esta habilitada */
+    /* span {
       color: red;
-      margin:2px auto;
+      margin: 2px auto;
       margin-left: 10px;
-    }
+    } */
   </style>
 </head>
+
 <body>
   <h1>Factura</h1>
   <p>
     <label for="">Concepto:</label>
-    <input type="text" id="concept">
+    <input type="text" id="concept" required>
   </p>
   <p>
     <label for="">Cantidad:</label>
@@ -52,14 +62,15 @@
   </p>
   <p>
     <label for="">Precio</label>
-    <input type="number" id="cost"><div1 id="precio">€</div1> 
+    <input type="number" id="cost">
+    <div1 id="precio">€</div1>
   </p>
   <div>
     <button onclick="insert()">Insertar</button>
   </div>
-  
-  
-  
+
+
+
   <table>
     <thead>
       <tr>
@@ -100,107 +111,119 @@
     const inputNewProduct = document.querySelector("#concept")
     const inputNewQuantity = document.querySelector("#quantity")
     const inputNewPrice = document.querySelector("#cost")
-    function insert(){
-      
-      if (checkData1()!=0) {
-        
+
+    inputNewProduct.setCustomValidity("Necesitas introducir un texto");
+    inputNewQuantity.setCustomValidity("El número debe ser entero");
+    inputNewPrice.setCustomValidity("El coste no puede ser inferior a 0€ ni estar vacio");
+
+    function insert() {
+
+      if (!checkData()) {
+
       }
-      else{
+      else {
         let tr = document.createElement("tr")
-      let tdPro = document.createElement("td")
-      tdPro.textContent = inputNewProduct.value
-      let tdQua = document.createElement("td")
-      tdQua.textContent = inputNewQuantity.value
-      let tdPri = document.createElement("td")
-      tdPri.textContent=inputNewPrice.value+"€"
-      let tdTotal = document.createElement("td")
-      tdTotal.textContent = (inputNewPrice.value*inputNewQuantity.value)+"€"
-      tdTotal.setAttribute("id","totalProductPrice")
-      let x = document.createElement("td")
-      x.textContent="X"
-      x.setAttribute("onclick","removeProduct(this)")
-      tr.append(tdPro)
-      tr.append(tdQua)
-      tr.append(tdPri)
-      tr.append(tdTotal)
-      tr.append(x)
-      table.append(tr)
-      calPrice()
-      clearData()
-      
-      }
-      
-    }
+        let tdPro = document.createElement("td")
+        tdPro.textContent = inputNewProduct.value
+        let tdQua = document.createElement("td")
+        tdQua.textContent = inputNewQuantity.value
+        let tdPri = document.createElement("td")
+        tdPri.textContent = inputNewPrice.value + "€"
+        let tdTotal = document.createElement("td")
+        tdTotal.textContent = (inputNewPrice.value * inputNewQuantity.value) + "€"
+        tdTotal.setAttribute("id", "totalProductPrice")
+        let x = document.createElement("td")
+        x.textContent = "X"
+        x.setAttribute("onclick", "removeProduct(this)")
+        tr.append(tdPro)
+        tr.append(tdQua)
+        tr.append(tdPri)
+        tr.append(tdTotal)
+        tr.append(x)
+        table.append(tr)
+        calPrice()
+        clearData()
 
-    function clearData(){
-      inputNewProduct.value=""
-      inputNewQuantity.value=""
-      inputNewPrice.value=""
-      
-    }
-    function checkData(product,quantity,cost) {
-      if (!(product=="")&&(parseInt(quantity)==quantity&&cost>=0)) {
-         return true 
-        }
-      else{
-        return false
       }
-    }
-    function checkData1(){
-      document.querySelectorAll("span").forEach(span => span.remove());
-      let count =0
-      if((inputNewProduct.value=="")){
-        let span = document.createElement("span")
-        span.textContent="Necesitas introducir un texto"
-        inputNewProduct.after(span)
-        count--
-      }
-      if (!(parseInt(inputNewQuantity.value)==inputNewQuantity.value)) {
-        let span = document.createElement("span")
-        span.textContent="El número debe ser entero"
-        inputNewQuantity.after(span)
-        count --
-      }
-      if (inputNewPrice.value < 0 ||inputNewPrice.value=="") {
-        let span = document.createElement("span")
-        span.textContent="El coste no puede ser inferior a 0€ ni estar vacio"
-        document.querySelector('#precio').after(span)
-        // inputNewPrice.after(span)
-        count --
-      }
-     
-      return count
 
     }
-      
-    
-    function removeProduct(td){
+
+    function clearData() {
+      inputNewProduct.value = ""
+      inputNewQuantity.value = ""
+      inputNewPrice.value = ""
+
+    }
+
+    /**
+     * CheckData revisa que los inputs contengan los valores requeridos , el codigo comentado es una alternativa mas tosca
+    */
+    function checkData() {
+      // document.querySelectorAll("span").forEach(span => span.remove());
+      // let count =0
+      // if((inputNewProduct.value=="")){
+      //   let span = document.createElement("span")
+      //   span.textContent="Necesitas introducir un texto"
+      //   inputNewProduct.after(span)
+      //   count--
+      // }
+      // if (!(parseInt(inputNewQuantity.value)==inputNewQuantity.value)) {
+      //   let span = document.createElement("span")
+      //   span.textContent="El número debe ser entero"
+      //   inputNewQuantity.after(span)
+      //   count --
+      // }
+      // if (inputNewPrice.value < 0 ||inputNewPrice.value=="") {
+      //   let span = document.createElement("span")
+      //   span.textContent="El coste no puede ser inferior a 0€ ni estar vacio"
+      //   document.querySelector('#precio').after(span)
+      //   // inputNewPrice.after(span)
+      //   count --
+      // }
+      if (inputNewProduct.value == "") {
+        inputNewProduct.reportValidity(); //ReportValidity activa la notificacion 
+        return false;
+      }
+
+      if (!(parseInt(inputNewQuantity.value) == inputNewQuantity.value)) {
+        inputNewQuantity.reportValidity();
+        return false;
+      }
+
+      if (inputNewPrice.value < 0 || inputNewPrice.value == "") {
+        inputNewPrice.reportValidity();
+        return false;
+      }
+
+      return true;
+    }
+
+
+    function removeProduct(td) {
       td.parentElement.remove()
       calPrice()
     }
-    function setTaxe(tax){
+    function setTaxe(tax) {
       let taxe = document.querySelector("#taxe")
       taxe.textContent = tax
-      taxe.setAttribute("id","taxe")
+      taxe.setAttribute("id", "taxe")
       calPrice()
     }
     function calPrice() {
       let taxe = document.querySelector("#taxe")
-      let costs= document.querySelectorAll("#totalProductPrice")
-      let aux=0
+      let costs = document.querySelectorAll("#totalProductPrice")
+      let aux = 0
       let subTotal = 0
       costs.forEach(element => {
-        subTotal+= parseFloat(element.textContent)
-        
+        subTotal += parseFloat(element.textContent)
+
       });
-      
-      document.querySelector('#subTotal').textContent = subTotal+"€"
-      document.querySelector('#totaltaxe').textContent =((parseFloat(taxe.textContent)/100)*subTotal).toFixed(2)+"€"
-      
-      document.querySelector('#Total').textContent = ((parseFloat(taxe.textContent)/100+1)*subTotal).toFixed(2)+"€"
-      
+      document.querySelector('#subTotal').textContent = subTotal + "€"
+      document.querySelector('#totaltaxe').textContent = ((parseFloat(taxe.textContent) / 100) * subTotal).toFixed(2) + "€"
+      document.querySelector('#Total').textContent = ((parseFloat(taxe.textContent) / 100 + 1) * subTotal).toFixed(2) + "€"
     } 
-    </script>
- 
+  </script>
+
 </body>
+
 </html>
