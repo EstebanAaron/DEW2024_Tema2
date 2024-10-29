@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crucigrama Interactivo</title>
+    <style>
+        /* Centrado del contenido */
+        body, html {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #3d628d;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .contenedor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2vh 2vw;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90vw;
+            max-width: 800px;
+            min-height: 80vh; /* Altura mínima establecida */
+            height: auto; /* Permite que el contenedor crezca automáticamente */
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 4vh;
+            color: #007BFF;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            padding-bottom: 1%;
+        }
+
+        #crucigrama {
+            width: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        td {
+            width: 4vw;  /* Ancho fijo de las celdas */
+            height: 3vh; /* Alto fijo de las celdas */
+            border: 1px solid #000;
+            text-align: center;
+            position: relative;
+            vertical-align: top;
+        }
+
+        input {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 3vh;
+            border: none;
+            outline: none;
+            background-color: rgba(128, 117, 117, 0.116);
+            color: #000;
+        }
+
+        td.hidden {
+            border: none;
+            background-color: transparent;
+            visibility: hidden;
+        }
+
+        .numero {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 1.5vh;
+            color: #555;
+        }
+
+        /* Contenedor para el botón y el resultado */
+        .acciones {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        button {
+            margin: 10px 0;
+            padding: 1vh 1vw;
+            font-size: 2.5vh;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultado {
+            font-size: 2vh;
+            margin-top: 10px;
+        }
+
+        .incorrecto {
+            color: red;
+            font-weight: bold;
+        }
+
+        .correcto {
+            color: green;
+            font-weight: bold;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            font-size: 1.5vh;
+            color: #000000;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>Crucigrama Interactivo</h1>
+        <div id="crucigrama"></div>
+        <div class="acciones">
+            <button onclick="comprobarRespuestas()">Comprobar</button>
+            <p id="resultado"></p>
+        </div>
+        <footer>
+            Desarrollado por Eva Sanfiel
+        </footer>
+    </div>
+
+    <script>
+        const filas = 14;
+        const columnas = 14;
+
+        const palabras = [
+            { palabra: "INFORMATICA", fila: 1, columna: 0, direccion: "V", numero: 3 },
+            { palabra: "MANTENIMIENTO", fila: 6, columna: 0, direccion: "H", numero: 1 },
+            { palabra: "DISTRIBUCION", fila: 1, columna: 6, direccion: "V", numero: 2 },
+            { palabra: "ALMACENAJE", fila: 0, columna: 10, direccion: "V", numero: 4 },
+            { palabra: "TRANSPORTE", fila: 0, columna: 12, direccion: "V", numero: 5 },
+            { palabra: "COMPRAS", fila: 11, columna: 5, direccion: "H", numero: 6 }
+        ];
+
+        function crearCuadricula(filas, columnas) {
+            const cuadricula = [];
+            for (let i = 0; i < filas; i++) {
+                const fila = [];
+                for (let j = 0; j < columnas; j++) {
+                    fila.push('');
+                }
+                cuadricula.push(fila);
+            }
+            return cuadricula;
+        }
+
+        function insertarPalabras(cuadricula, palabras) {
+            palabras.forEach(({ palabra, fila, columna, direccion, numero }) => {
+                for (let i = 0; i < palabra.length; i++) {
+                    if (direccion === "H") {
+                        cuadricula[fila][columna + i] = { letra: palabra[i], numero: (i === 0) ? numero : '' };
+                    } else if (direccion === "V") {
+                        cuadricula[fila + i][columna] = { letra: palabra[i], numero: (i === 0) ? numero : '' };
+                    }
+                }
+            });
+        }
+
+        function mostrarCrucigrama(cuadricula) {
+            const tabla = document.createElement('table');
+            cuadricula.forEach((fila, i) => {
+                const filaElement = document.createElement('tr');
+                fila.forEach((celda, j) => {
+                    const celdaElement = document.createElement('td');
+                    const inputElement = document.createElement('input');
+                    inputElement.setAttribute('maxlength', '1');
+                    inputElement.dataset.fila = i;
+                    inputElement.dataset.columna = j;
+
+                    inputElement.addEventListener('keydown', manejarTeclas);
+
+                    if (typeof celda === 'object') {
+                        inputElement.dataset.respuestaCorrecta = celda.letra;
+                        if (celda.numero) {
+                            celdaElement.innerHTML = `<span class="numero">${celda.numero}</span>`;
+                        }
+                    } else if (celda !== '') {
+                        inputElement.dataset.respuestaCorrecta = celda;
+                    } else {
+                        celdaElement.classList.add('hidden');
+                        inputElement.disabled = true;
+                    }
+
+                    celdaElement.appendChild(inputElement);
+                    filaElement.appendChild(celdaElement);
+                });
+                tabla.appendChild(filaElement);
+            });
+            document.getElementById('crucigrama').appendChild(tabla);
+        }
+
+        function manejarTeclas(event) {
+            const input = event.target;
+            const fila = parseInt(input.dataset.fila);
+            const columna = parseInt(input.dataset.columna);
+
+            if (event.key === 'ArrowUp' && fila > 0) {
+                moverAlInput(fila - 1, columna);
+                event.preventDefault();
+            } else if (event.key === 'ArrowDown' && fila < filas - 1) {
+                moverAlInput(fila + 1, columna);
+                event.preventDefault();
+            } else if (event.key === 'ArrowLeft' && columna > 0) {
+                moverAlInput(fila, columna - 1);
+                event.preventDefault();
+            } else if (event.key === 'ArrowRight' && columna < columnas - 1) {
+                moverAlInput(fila, columna + 1);
+                event.preventDefault();
+            }
+        }
+
+        function moverAlInput(fila, columna) {
+            const input = document.querySelector(`input[data-fila="${fila}"][data-columna="${columna}"]:not([disabled])`);
+            if (input) {
+                input.focus();
+            }
+        }
+
+        function comprobarRespuestas() {
+            let correcto = true;
+            document.querySelectorAll('input:not([disabled])').forEach(input => {
+                const respuestaCorrecta = input.dataset.respuestaCorrecta.toUpperCase();
+                const respuestaIngresada = input.value.toUpperCase();
+
+                if (respuestaIngresada === '') {
+                    // No se hace nada, la celda vacía no se marca
+                    correcto = false;
+                } else if (respuestaIngresada === respuestaCorrecta) {
+                    input.classList.add('correcto');
+                    input.classList.remove('incorrecto');
+                } else {
+                    input.classList.add('incorrecto');
+                    input.classList.remove('correcto');
+                    correcto = false;
+                }
+            });
+
+            const resultado = document.getElementById('resultado');
+            if (correcto) {
+                resultado.textContent = "¡Todas las respuestas son correctas!";
+                resultado.className = "correcto";
+            } else {
+                resultado.textContent = "Algunas respuestas son incorrectas.";
+                resultado.className = "incorrecto";
+            }
+        }
+
+        const cuadricula = crearCuadricula(filas, columnas);
+        insertarPalabras(cuadricula, palabras);
+        mostrarCrucigrama(cuadricula);
+    </script>
+</body>
+</html>

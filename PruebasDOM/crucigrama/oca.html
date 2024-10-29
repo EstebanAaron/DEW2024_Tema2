@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de La Oca en Espiral</title>
+    <style>
+        body, html {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #007BFF;
+            margin-top: 20px;
+        }
+
+        .tablero {
+            display: grid;
+            grid-template-columns: repeat(7, 80px); /* Aumentar el tamaño de las casillas */
+            grid-gap: 10px; /* Aumentar el espacio entre las casillas */
+            margin: 20px auto;
+            width: max-content;
+        }
+
+        .casilla {
+            width: 80px; /* Aumentar el tamaño de las casillas */
+            height: 80px; /* Aumentar el tamaño de las casillas */
+            background-color: #fff;
+            border: 1px solid #000;
+            display: flex;
+            align-items: flex-start; /* Alinear el contenido en la parte superior */
+            justify-content: center;
+            position: relative;
+        }
+
+        .valor {
+            position: absolute;
+            top: 5px; /* Ajustar la posición del número */
+            left: 5px; /* Ajustar la posición del número */
+            font-weight: bold;
+            background-color: #fff;
+        }
+
+        .jugador {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+            top: 55px; /* Cambiar la posición para que no cubra el número */
+            left: 5px;
+        }
+
+        .jugador1 {
+            background-color: red;
+        }
+
+        .jugador2 {
+            background-color: blue;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 20px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .status {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Juego de la Oca en Espiral</h1>
+    <div class="tablero" id="tablero"></div>
+    <button id="tirarDado" onclick="tirarDado()">Tirar dado</button>
+    <p class="status" id="status"></p>
+
+    <script>
+        const numCasillas = 49; // Total de casillas
+        const jugadores = [
+            { nombre: 'Jugador 1', posicion: 0, color: 'red' },
+            { nombre: 'Jugador 2', posicion: 0, color: 'blue' }
+        ];
+        let turnoActual = 0;
+
+        // Espiral desde el exterior hacia el centro
+        const espiral = [
+            0,  1,  2,  3,  4,  5,  6,
+            23, 24, 25, 26,  27,  28,  7,
+            22, 39, 40, 41, 42, 29, 8,
+            21, 38, 47, 48, 43, 30, 9,
+            20, 37, 46, 45, 44, 31, 10,
+            19, 36, 35, 34, 33, 32, 11,
+            18, 17, 16, 15, 14, 13, 12
+        ];
+
+        // Imágenes que se pueden agregar a las casillas
+        const imagenes = [
+            'img/1.png', // Puedes cambiar estas rutas a las imágenes que desees
+            'img/2.jpeg',
+            'ruta/a/tu/imagen3.png',
+            'ruta/a/tu/imagen4.png',
+            'ruta/a/tu/imagen5.png',
+            // Agrega más imágenes según sea necesario
+        ];
+
+        function crearTablero() {
+            const tablero = document.getElementById('tablero');
+            espiral.forEach((numero, index) => {
+                const casilla = document.createElement('div');
+                casilla.classList.add('casilla');
+                casilla.id = 'casilla-' + index;
+
+                // Mostrar el valor del array en la esquina superior izquierda
+                const valor = document.createElement('div');
+                valor.classList.add('valor');
+                valor.textContent = numero; // Mostrar el valor del array
+                casilla.appendChild(valor);
+
+                // Agregar una imagen a la casilla si hay una disponible
+                if (index < imagenes.length) {
+                    const img = document.createElement('img');
+                    img.src = imagenes[index];
+                    img.alt = `Imagen ${numero}`;
+                    img.style.width = '100%'; // Ajustar el tamaño de la imagen
+                    img.style.height = '100%'; // Ajustar el tamaño de la imagen
+                    img.style.objectFit = 'cover'; // Ajustar la imagen para que cubra la casilla
+                    casilla.appendChild(img);
+                }
+
+                tablero.appendChild(casilla);
+            });
+        }
+
+        function actualizarTablero() {
+            // Limpiar las posiciones de los jugadores en el tablero
+            document.querySelectorAll('.jugador').forEach(jugador => jugador.remove());
+
+            // Colocar jugadores en las nuevas posiciones
+            jugadores.forEach(jugador => {
+                const casilla = document.getElementById('casilla-' + jugador.posicion);
+                if (casilla) {
+                    const ficha = document.createElement('div');
+                    ficha.classList.add('jugador');
+                    ficha.classList.add(jugador.nombre === 'Jugador 1' ? 'jugador1' : 'jugador2');
+                    casilla.appendChild(ficha);
+                }
+            });
+        }
+
+        function tirarDado() {
+            const dado = Math.floor(Math.random() * 6) + 1;
+            const jugadorActual = jugadores[turnoActual];
+            
+            // Obtener el valor actual en el tablero
+            const valorActual = espiral[jugadorActual.posicion];
+
+            // Calcular el nuevo valor que se debe alcanzar
+            const nuevoValor = valorActual + dado;
+
+            // Verificar si el nuevo valor es mayor o igual a 48 para ganar
+            if (nuevoValor >= 48) {
+                jugadorActual.posicion = 48; // Mover a la última posición
+                actualizarTablero();
+                document.getElementById('status').textContent = `${jugadorActual.nombre} tiró un ${dado} y ha ganado el juego! Ahora está en la casilla 48.`;
+                document.getElementById('tirarDado').disabled = true; // Deshabilitar el botón
+                return;
+            }
+
+            // Buscar la nueva posición correspondiente al nuevo valor
+            const nuevaPosicion = espiral.indexOf(nuevoValor);
+
+            // Verificar si el nuevo índice es válido
+            if (nuevaPosicion !== -1) {
+                jugadorActual.posicion = nuevaPosicion; // Actualiza la posición del jugador
+                actualizarTablero();
+                document.getElementById('status').textContent = `${jugadorActual.nombre} tiró un ${dado}. Ahora está en la casilla ${nuevoValor}.`;
+            } else {
+                document.getElementById('status').textContent = `${jugadorActual.nombre} no puede moverse a esa casilla.`;
+            }
+
+            // Cambiar turno
+            turnoActual = (turnoActual + 1) % 2;
+        }
+
+        // Crear el tablero cuando la página cargue
+        crearTablero();
+        actualizarTablero();
+    </script>
+</body>
+</html>

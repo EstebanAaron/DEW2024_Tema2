@@ -1,0 +1,136 @@
+ /* Centrado del contenido */
+ body, html {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #3d628d;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+/* Contenedor centrado y escalado */
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2vh 2vw;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80vw;  /* Ancho relativo al viewport */
+    max-width: 800px;  /* Ancho máximo para pantallas grandes */
+    height: 80vh;  /* Altura fija */
+    overflow: hidden;  /* Sin desplazamiento */
+    margin: 0 auto;
+}
+
+/* Estilo del título más grande y llamativo */
+h1 {
+    font-size: 4vh;  /* Tamaño relativo al viewport */
+    color: #007BFF;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    padding-bottom: 8%;
+}
+
+/* Tabla del crucigrama */
+table {
+    border-collapse: collapse;
+    margin: 20px 0;  /* Espaciado vertical */
+    width: 100%;  /* Ancho completo del contenedor */
+    height: auto;  /* Alto automático */
+}
+
+td {
+    width: 8%;  /* Ancho de las celdas relativo al tamaño de la tabla */
+    height: 8%;  /* Alto de las celdas relativo al tamaño de la tabla */
+    min-width: 40px;  /* Ancho mínimo */
+    min-height: 40px;  /* Alto mínimo */
+    border: 1px solid #000;
+    text-align: center;
+    position: relative;
+    vertical-align: top;
+}
+
+/* Input dentro de las celdas */
+input {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 3vh;  /* Tamaño de fuente relativo al viewport */
+    border: none;
+    outline: none;
+    background-color: rgba(128, 117, 117, 0.116);
+    color: #000;
+}
+
+/* Celdas ocultas */
+td.hidden {
+    border: none;
+    background-color: transparent;
+    visibility: hidden;
+}
+
+/* Estilo para los números pequeños */
+.numero {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 1.5vh;  /* Tamaño de fuente relativo al viewport */
+    color: #555;
+}
+
+/* Botón de comprobación */
+button {
+    margin: 20px 0;
+    padding: 1.5vh 2vw;
+    font-size: 2.5vh;  /* Tamaño de fuente relativo al viewport */
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;  /* Botón ocupa todo el ancho del contenedor */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Resultado */
+#resultado {
+    font-size: 2vh;  /* Tamaño de fuente relativo al viewport */
+    margin-top: 10px;
+}
+
+/* Letras incorrectas y correctas */
+.incorrecto {
+    color: red;
+    font-weight: bold;
+}
+
+.correcto {
+    color: green;
+    font-weight: bold;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    font-size: 1.5vh;  /* Tamaño de fuente relativo al viewport */
+    color: #000000;
+    text-align: center;
+}
+
+/* Mejorando el input en dispositivos móviles */
+input[type="text"] {
+    -webkit-text-security: none;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+}
