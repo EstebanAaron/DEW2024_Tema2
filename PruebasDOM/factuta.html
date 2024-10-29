@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
+    div{
+      margin: 20px;
+      margin-bottom: 20px;
+    }
     body{
       text-align: center;
       align-items: center;
@@ -26,6 +30,14 @@
     tfoot{
       background-color: lightblue;
     }
+    #taxe{
+      color: red;
+    }
+    span{
+      color: red;
+      margin:2px auto;
+      margin-left: 10px;
+    }
   </style>
 </head>
 <body>
@@ -36,13 +48,16 @@
   </p>
   <p>
     <label for="">Cantidad:</label>
-    <input type="text" id="quantity">
+    <input type="number" id="quantity">
   </p>
   <p>
     <label for="">Precio</label>
-    <input type="text" id="cost">€
+    <input type="number" id="cost"><div1 id="precio">€</div1> 
   </p>
-  <button onclick="insert()">Insertar</button>
+  <div>
+    <button onclick="insert()">Insertar</button>
+  </div>
+  
   
   
   <table>
@@ -58,32 +73,134 @@
     <tfoot>
       <tr>
         <td colspan="3">Subtotal</td>
-        <td>--€</td>
+        <td id="subTotal">--€</td>
         <td></td>
       </tr>
       <tr>
         <td>Tasa:</td>
-        <td>--%</td>
+        <td id="taxe">--%</td>
         <td>Impuestos:</td>
-        <td>--€</td>
+        <td id="totaltaxe">--€</td>
         <td></td>
       </tr>
       <tr>
         <td colspan="3">Total:</td>
-        <td>--€</td>
+        <td id="Total">--€</td>
         <td></td>
       </tr>
     </tfoot>
   </table>
+  <div>
+    <button onclick="setTaxe('5%')">Tasa 5%</button>
+    <button onclick="setTaxe('15%')">Tasa 15%</button>
+    <button onclick="setTaxe('30%')">Tasa 30%</button>
+  </div>
   <script>
     const table = document.querySelector('table')
+    const inputNewProduct = document.querySelector("#concept")
+    const inputNewQuantity = document.querySelector("#quantity")
+    const inputNewPrice = document.querySelector("#cost")
     function insert(){
-      const inputNewProduct = document.querySelector("#concept")
-      const inputNewQuantity = document.querySelector("#quantity")
-      const inputNewPrice = document.querySelector("#price")
+      
+      if (checkData1()!=0) {
+        
+      }
+      else{
+        let tr = document.createElement("tr")
+      let tdPro = document.createElement("td")
+      tdPro.textContent = inputNewProduct.value
+      let tdQua = document.createElement("td")
+      tdQua.textContent = inputNewQuantity.value
+      let tdPri = document.createElement("td")
+      tdPri.textContent=inputNewPrice.value+"€"
+      let tdTotal = document.createElement("td")
+      tdTotal.textContent = (inputNewPrice.value*inputNewQuantity.value)+"€"
+      tdTotal.setAttribute("id","totalProductPrice")
+      let x = document.createElement("td")
+      x.textContent="X"
+      x.setAttribute("onclick","removeProduct(this)")
+      tr.append(tdPro)
+      tr.append(tdQua)
+      tr.append(tdPri)
+      tr.append(tdTotal)
+      tr.append(x)
+      table.append(tr)
+      calPrice()
+      clearData()
+      
+      }
+      
+    }
 
+    function clearData(){
+      inputNewProduct.value=""
+      inputNewQuantity.value=""
+      inputNewPrice.value=""
+      
+    }
+    function checkData(product,quantity,cost) {
+      if (!(product=="")&&(parseInt(quantity)==quantity&&cost>=0)) {
+         return true 
+        }
+      else{
+        return false
+      }
+    }
+    function checkData1(){
+      document.querySelectorAll("span").forEach(span => span.remove());
+      let count =0
+      if((inputNewProduct.value=="")){
+        let span = document.createElement("span")
+        span.textContent="Necesitas introducir un texto"
+        inputNewProduct.after(span)
+        count--
+      }
+      if (!(parseInt(inputNewQuantity.value)==inputNewQuantity.value)) {
+        let span = document.createElement("span")
+        span.textContent="El número debe ser entero"
+        inputNewQuantity.after(span)
+        count --
+      }
+      if (inputNewPrice.value < 0 ||inputNewPrice.value=="") {
+        let span = document.createElement("span")
+        span.textContent="El coste no puede ser inferior a 0€ ni estar vacio"
+        document.querySelector('#precio').after(span)
+        // inputNewPrice.after(span)
+        count --
+      }
+     
+      return count
 
     }
-  </script>
+      
+    
+    function removeProduct(td){
+      td.parentElement.remove()
+      calPrice()
+    }
+    function setTaxe(tax){
+      let taxe = document.querySelector("#taxe")
+      taxe.textContent = tax
+      taxe.setAttribute("id","taxe")
+      calPrice()
+    }
+    function calPrice() {
+      let taxe = document.querySelector("#taxe")
+      let costs= document.querySelectorAll("#totalProductPrice")
+      let aux=0
+      let subTotal = 0
+      costs.forEach(element => {
+        subTotal+= parseFloat(element.textContent)
+        
+      });
+      
+      document.querySelector('#subTotal').textContent = subTotal+"€"
+      document.querySelector('#totaltaxe').textContent =((parseFloat(taxe.textContent)/100)*subTotal).toFixed(2)+"€"
+      
+      document.querySelector('#Total').textContent = ((parseFloat(taxe.textContent)/100+1)*subTotal).toFixed(2)+"€"
+      
+    } 
+    </script>
+ 
 </body>
 </html>
