@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .selected{
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>Listado</h1>
+  <input type="text" id="filter" oninput="search()">
+  <ul id="origin"></ul>
+  <hr>
+  <ul id="destiny"></ul>
+  <button onclick="sendSelectedElements()"> enviar</button>
+  <button onclick="sortSubjects()"> ordenar</button>
+  <script>
+    const subjects = ["DEW","DSW","DOR", "DPL", "EMR", "PRY", "FCT"]
+    const list = document.querySelector("ul");
+    const destiny= document.getElementById("destiny")
+    const inputFilter = document.getElementById("filter")
+    function selectedItem(element) {
+      element.classList.toggle("selected")
+    }
+
+    const items = document.querySelectorAll("li")
+    items.forEach(item => item.setAttribute("onclick","selectedItem(this)"));
+
+    function sendSelectedElements() {
+      console.log([...list.children].filter( items => items.classList.contains("selected")).map(items => items.textContent));
+      
+
+      [...list.children].filter( items => items.classList.contains("selected")).forEach(item => {destiny.append(item); selectedItem(item)})
+    }
+
+    
+    subjects.forEach(subject => createSubject(subject));
+    
+
+    function createSubject(text) {
+      const li = document.createElement("li")
+      li.textContent= text
+      li.setAttribute("onclick","selectedItem(this)")
+      list.append(li)
+    }
+
+    function search() {
+      let word = inputFilter.value;
+      [...list.children].forEach(li=>{
+        if (li.textContent.toLocaleUpperCase().includes(word.toLocaleUpperCase())) {
+          li.hidden=false
+        }
+        else{
+          li.hidden=true
+        }
+      })
+    }
+
+    function sortSubjects() {
+      let liSubjects = [...document.querySelectorAll("#origin li")];
+      liSubjects.sort((a,b)=>a.textContent.localeCompare(b.textContent))
+      liSubjects.forEach(li => list.append(li))
+    }
+  </script>
+</body>
+</html>
