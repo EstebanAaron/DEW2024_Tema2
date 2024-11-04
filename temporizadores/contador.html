@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Contadores</h1>
+  <p>
+    Contador: <span id="counter">0</span>
+    Contador2: <span id="counter1">0</span>
+  </p>
+  <script>
+    const counter = document.getElementById("counter");
+    const counter1 = document.getElementById("counter1");
+    function increment() {
+      if (counter.innerHTML==4) {
+        counter.innerHTML=0
+        counter1.innerHTML++
+      }
+      counter.innerHTML++
+    }
+    let cont1 =0
+
+    function stopCount(contador) {
+      clearInterval(contador)
+    }
+    function starCount() {
+      if (cont1==0) cont1 =setInterval(increment,1000);
+      
+    }
+  </script>
+  <button onclick="stopCount(cont1)">Parar</button>
+  <button onclick="starCount()">Iniciar</button>
+</body>
+</html>

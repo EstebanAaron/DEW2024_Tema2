@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  #container{
+    margin: 50px;
+    background-color: blue;
+    height: 400px;
+  }
+
+  .cell{
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(19, 153, 7);
+    float: left;
+    cursor: pointer;
+  }
+</style>
+<body>
+  <h1>Crear Cajas</h1>
+  <div id="container">
+    <div class="cell"></div>
+    <div class="cell"></div>
+  </div>
+  <script>
+    const container = document.getElementById('container')
+    let counter = -1;
+    function createBox() {
+      let cell = document.createElement("div")
+      cell.classList.add("cell")
+      cell.textContent = counter++
+      cell.onclick= function () {
+        cell.remove()
+      }
+      if (counter==400) {
+        clearInterval(interval)
+      }
+      
+      container.append(cell)
+    }
+
+    let interval=setInterval(createBox, 10)
+  </script>
+</body>
+</html>
