@@ -194,3 +194,87 @@ const DATA = [{
       }]
     }
   ];
+
+  const companies = document.getElementById("companies")
+  const employees = document.getElementById("selected")
+  const button = document.getElementById("contac")
+  const inputFilter = document.getElementById("search")
+
+  inputFilter.setAttribute("oninput","search()")
+  button.setAttribute("onclick","contac()")
+  DATA.forEach(element => {
+    let company = document.createElement("div")
+    company.classList.add("company")
+    
+    let name = document.createElement("h1")
+    name.textContent= element.company
+
+    let img = document.createElement("img")
+    let addres = "img/"+element.logo
+    
+    img.setAttribute("src",addres)
+    let aux = "Logo de "+element.logo
+    img.setAttribute("alt",aux)
+    img.setAttribute("onclick","send(this)")
+
+    let hr = document.createElement("hr")
+
+    company.append(name,img,hr)
+    companies.append(company)
+    element.employees.forEach(employe => {
+      let divEmployee = document.createElement("div") 
+      divEmployee.classList.add("employee")
+
+      divEmployee.setAttribute("onclick","selectedItem(this)")
+      divEmployee.setAttribute("mail",employe.mail)
+
+      let name = document.createElement("h1")
+      name.textContent= employe.fullname
+
+      divEmployee.append(name)
+      company.append(divEmployee)
+      
+    })
+  });
+
+  function selectedItem(employe){
+    employees.append(employe)
+  }
+
+  function contac(){
+    [...employees.children].forEach(employe =>{
+      console.log(employe.getAttribute("mail"));
+      
+    })
+  }
+
+  function search() {
+    let word = inputFilter.value;
+    let employeesSearch = document.querySelectorAll(".employee");
+
+
+
+
+    [...employeesSearch].forEach(li=>{
+      
+      
+      console.log(li.textContent);
+      if (li.textContent.toLocaleUpperCase().includes(word.toLocaleUpperCase())) {
+        li.classList.remove("hidden")
+      }
+      else{
+        li.classList.add("hidden")
+      }
+    });
+    
+  }
+
+  function send(company1) {
+    [...employees.children].forEach( empleoye =>{
+    company1.parentElement.append(empleoye)
+    })
+  }
+
+  
+  
+  

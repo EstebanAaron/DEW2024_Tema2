@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,22 +12,72 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>Barras de tiempo</h1>
-    <p>Nombre: <input type="text" name="title"></p>
-    <p>Tiempo: <input type="number" name="time">  (en segundos)</p>
-    <p><button onclick="">Crear</button></p>  
+    <p>Nombre: <input type="text" name="title" id="name"></p>
+    <p>Tiempo: <input type="number" name="time" id="timer"> (en segundos)</p>
+    <p><button onclick="createBar()">Crear</button></p>
   </header>
-  <main>
+  <main id="main">
     <!-- Esto es un ejemplo y debe ser borrado -->
     <p>
       <span>Ejemplo Título: </span>
-      <meter min="0" max="100" low="25" high="50" optimum="100" value="80"></meter>
+      <meter min="0" max="100" low="25" high="50" optimum="100" value="30"></meter>
       <span>8</span>
     </p>
     <!-- Fin del ejemplo. -->
+
+    <script>
+        
+
+
+      function createBar() {
+        const parraf = document.createElement("p")
+        const span = document.createElement("span")
+        const meter = document.createElement("meter")
+        const span2 = document.createElement("span")
+        let count = document.getElementById("timer").value
+
+      
+
+        meter.setAttribute("min","0")
+        let max = count*10
+        meter.setAttribute("max",max)
+        let high = count*10/2
+        let low = count*10/4
+        meter.setAttribute("low",low)
+        meter.setAttribute("high",high)
+        meter.setAttribute("optimun",max)
+
+        function contadorRegresivo() {
+          
+          let idTemporizador = setInterval(() => {
+            if (count <= 0) {
+              clearInterval(idTemporizador);
+            } else {
+              count--;
+              meter.setAttribute("value",count*10)
+              span2.textContent=count
+            }
+          }, 100);
+        }
+        
+        contadorRegresivo()
+
+        span.textContent=document.getElementById("name").value;
+
+        parraf.append(span,meter,span2)
+        document.getElementById("main").append(parraf)
+
+      }
+
+      
+      
+    </script>
   </main>
 
 </body>
+
 </html>
